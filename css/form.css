@@ -1,0 +1,217 @@
+:root {
+     --primary-color: #2c3e50;
+     --secondary-color: #3498db;
+     --accent-color: #2980b9;
+     --light-gray: #f5f7fa;
+     --medium-gray: #e0e6ed;
+     --dark-gray: #7f8c8d;
+     --text-color: #2c3e50;
+     --success-color: #27ae60;
+ }
+
+ * {
+     box-sizing: border-box;
+     margin: 0;
+     padding: 0;
+     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+ }
+
+ body {
+     background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ed 100%);
+     min-height: 100vh;
+     padding: 30px 20px;
+     color: var(--text-color);
+     line-height: 1.6;
+ }
+
+ .container {
+     max-width: 900px;
+     margin: 0 auto;
+     background: white;
+     border-radius: 12px;
+     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+     overflow: hidden;
+ }
+
+ .header {
+     background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+     color: white;
+     padding: 25px 30px;
+     text-align: center;
+ }
+
+ .header h1 {
+     font-weight: 600;
+     font-size: 28px;
+     margin-bottom: 5px;
+     letter-spacing: 0.5px;
+ }
+
+ .header p {
+     opacity: 0.9;
+     font-size: 16px;
+ }
+
+ .form-content {
+     padding: 30px;
+ }
+
+ .form-group {
+     margin-bottom: 24px;
+ }
+
+ .form-row {
+     display: flex;
+     gap: 20px;
+     margin-bottom: 24px;
+ }
+
+ .form-row .form-group {
+     flex: 1;
+     margin-bottom: 0;
+ }
+
+ label {
+     display: block;
+     margin-bottom: 8px;
+     font-weight: 600;
+     color: var(--primary-color);
+     font-size: 15px;
+ }
+
+ .required::after {
+     content: " *";
+     color: #e74c3c;
+ }
+
+ input,
+ textarea,
+ select {
+     width: 100%;
+     padding: 12px 15px;
+     border: 1px solid var(--medium-gray);
+     border-radius: 8px;
+     font-size: 15px;
+     transition: all 0.3s ease;
+     background-color: #fff;
+ }
+
+ input:focus,
+ textarea:focus,
+ select:focus {
+     outline: none;
+     border-color: var(--secondary-color);
+     box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+ }
+
+ textarea {
+     min-height: 120px;
+     resize: vertical;
+     line-height: 1.5;
+ }
+
+ .button-container {
+     text-align: center;
+     margin-top: 30px;
+     padding-top: 20px;
+     border-top: 1px solid var(--medium-gray);
+ }
+
+ button {
+     background: linear-gradient(135deg, var(--secondary-color) 0%, var(--accent-color) 100%);
+     color: white;
+     border: none;
+     padding: 14px 32px;
+     font-size: 16px;
+     border-radius: 8px;
+     cursor: pointer;
+     transition: all 0.3s ease;
+     font-weight: 600;
+     letter-spacing: 0.5px;
+     box-shadow: 0 4px 12px rgba(52, 152, 219, 0.25);
+ }
+
+ button:hover {
+     transform: translateY(-2px);
+     box-shadow: 0 6px 15px rgba(52, 152, 219, 0.35);
+ }
+
+ button:active {
+     transform: translateY(0);
+ }
+
+ .form-section {
+     margin-bottom: 30px;
+     padding: 20px;
+     background-color: var(--light-gray);
+     border-radius: 8px;
+     border-left: 4px solid var(--secondary-color);
+ }
+
+ .form-section h2 {
+     color: var(--primary-color);
+     margin-bottom: 15px;
+     font-size: 18px;
+     display: flex;
+     align-items: center;
+     gap: 10px;
+ }
+
+ .form-section h2::before {
+     content: "•";
+     color: var(--secondary-color);
+     font-size: 24px;
+ }
+
+ @media (max-width: 768px) {
+     .form-row {
+         flex-direction: column;
+         gap: 0;
+     }
+
+     .form-content {
+         padding: 20px;
+     }
+
+     .header {
+         padding: 20px;
+     }
+
+     .header h1 {
+         font-size: 24px;
+     }
+ }
+
+ .notification {
+     position: fixed;
+     top: 20px;
+     right: 20px;
+     padding: 15px 20px;
+     background-color: var(--success-color);
+     color: white;
+     border-radius: 8px;
+     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+     transform: translateX(150%);
+     transition: transform 0.3s ease;
+     z-index: 1000;
+     display: flex;
+     align-items: center;
+     gap: 10px;
+ }
+
+ .notification.show {
+     transform: translateX(0);
+ }
+
+ .notification::before {
+     content: "✓";
+     font-weight: bold;
+     font-size: 18px;
+     background: rgba(255, 255, 255, 0.2);
+     border-radius: 50%;
+     width: 24px;
+     height: 24px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+ }
