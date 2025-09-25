@@ -2,7 +2,7 @@ const { jsPDF } = window.jspdf;
 let fotoData = null;
 
 document.addEventListener("DOMContentLoaded", () => {
-    $('#escolaridade, #experiencia, #habilidades, #idiomas').summernote({
+    $('#escolaridade, #experiencia, #habilidades, #idiomas, #resumo, #cursos').summernote({
         height: 200,
         toolbar: [
             ['style', ['bold', 'italic', 'underline']],
@@ -73,23 +73,34 @@ function generatePDF() {
 
     const formData = {
         nome: getValue("nome"),
+        cargo: getValue("cargo"),
         email: getValue("email"),
         telefone: getValue("telefone"),
         cpf: getValue("cpf"),
         endereco: getValue("endereco"),
+        linkedin: getValue("linkedin"),
+        portfolio: getValue("portfolio"),
+        resumo: getEditorContent("resumo"),
         escolaridade: getEditorContent("escolaridade"),
         experiencia: getEditorContent("experiencia"),
         habilidades: getEditorContent("habilidades"),
-        idiomas: getEditorContent("idiomas")
+        idiomas: getEditorContent("idiomas"),
+        cursos: getEditorContent("cursos")
     };
 
     y = addHeader(doc, formData, pageWidth, margin, y);
     y += 5;
 
+    // Adicionar resumo profissional se existir
+    if (formData.resumo) {
+        y = addSection(doc, "Resumo Profissional", formData.resumo, pageWidth, pageHeight, margin, lineHeight, y);
+    }
+
     y = addSection(doc, "Formação Acadêmica", formData.escolaridade, pageWidth, pageHeight, margin, lineHeight, y);
     y = addSection(doc, "Experiência Profissional", formData.experiencia, pageWidth, pageHeight, margin, lineHeight, y);
-    y = addSection(doc, "Habilidades", formData.habilidades, pageWidth, pageHeight, margin, lineHeight, y);
+    y = addSection(doc, "Habilidades e Competências", formData.habilidades, pageWidth, pageHeight, margin, lineHeight, y);
     y = addSection(doc, "Idiomas", formData.idiomas, pageWidth, pageHeight, margin, lineHeight, y);
+    y = addSection(doc, "Cursos e Certificações", formData.cursos, pageWidth, pageHeight, margin, lineHeight, y);
 
     const fileName = `Curriculo_${formData.nome.replace(/\s/g, "_")}.pdf`;
     doc.save(fileName);
@@ -117,10 +128,37 @@ function addHeader(doc, data, pageWidth, margin, y) {
     doc.setFont(undefined, "bold");
     doc.text(data.nome, textX, padding + 10);
 
-    doc.setFontSize(10);
+    doc.setFontSize(12);
     doc.setFont(undefined, "normal");
-    doc.text(`${data.email} | ${data.telefone} | CPF: ${data.cpf}`, textX, padding + 20);
-    doc.text(data.endereco, textX, padding + 27);
+    
+    // Adicionar cargo desejado
+    if (data.cargo) {
+        doc.text(data.cargo, textX, padding + 18);
+    }
+    
+    doc.setFontSize(10);
+    
+    // Construir linha de contato
+    let contactLine = data.email;
+    if (data.telefone) contactLine += ` | ${data.telefone}`;
+    if (data.cpf) contactLine += ` | CPF: ${data.cpf}`;
+    
+    doc.text(contactLine, textX, padding + 26);
+    
+    // Adicionar endereço
+    if (data.endereco) {
+        doc.text(data.endereco, textX, padding + 33);
+    }
+    
+    // Adicionar links profissionais
+    let linksY = padding + 40;
+    if (data.linkedin) {
+        doc.text(`LinkedIn: ${data.linkedin}`, textX, linksY);
+        linksY += 7;
+    }
+    if (data.portfolio) {
+        doc.text(`Portfólio: ${data.portfolio}`, textX, linksY);
+    }
 
     return headerHeight + padding;
 }
@@ -129,6 +167,11 @@ function addSection(doc, title, content, pageWidth, pageHeight, margin, lineHeig
     if (y > pageHeight - 40) {
         doc.addPage();
         y = margin;
+    }
+
+    // Verificar se há conteúdo para esta seção
+    if (!content || content.trim() === "") {
+        return y; // Pular seção vazia
     }
 
     doc.setFontSize(14);
@@ -146,16 +189,9 @@ function addSection(doc, title, content, pageWidth, pageHeight, margin, lineHeig
     doc.setFont(undefined, "normal");
     doc.setTextColor(0, 0, 0);
 
-    if (content) {
-        const lines = doc.splitTextToSize(content, pageWidth - 2 * margin);
-        doc.text(lines, margin, y);
-        y += lines.length * lineHeight + 5;
-    } else {
-        doc.setTextColor(150, 150, 150);
-        doc.text("Nenhuma informação fornecida.", margin, y);
-        doc.setTextColor(0, 0, 0);
-        y += lineHeight + 5;
-    }
+    const lines = doc.splitTextToSize(content, pageWidth - 2 * margin);
+    doc.text(lines, margin, y);
+    y += lines.length * lineHeight + 10;
 
     return y;
 }
